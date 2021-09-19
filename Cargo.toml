@@ -1,0 +1,20 @@
+[package]
+name = "voxel-mesh"
+version = "0.1.0"
+authors = ["lyon"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+crossbeam-channel = "0.5"
+gdnative = { git = "https://github.com/lyonbeckers/godot-rust.git", rev = "833b86c" }
+lazy_static = "1.4"
+legion = "0.4"
+nalgebra = "0.25"
+octree = { git = "https://github.com/lyonbeckers/rs-octree", rev = "c0a31df" }
+parking_lot = "0.11"
+rayon = "1.5"
+tracing = "0.1"
+
+
