@@ -8,7 +8,7 @@ use octree::PointData;
 pub use voxel::tile_data::TileData;
 
 pub type Octree = octree::Octree<i32, TileData>;
-pub type Aabb = octree::geometry::aabb::Aabb<i32>;
+pub type Aabb = aabb::Aabb<i32>;
 pub type Point = nalgebra::Vector3<i32>;
 pub type Vector3D = nalgebra::Vector3<f32>;
 
