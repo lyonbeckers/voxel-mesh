@@ -158,9 +158,9 @@ pub fn create_drawing_system(
 		Read<ManuallyChange>,
 	)>::query();
 
-	let tile_dimensions = TILE_DIMENSIONS.get().unwrap();
-
 	Box::new(move |world, resources| {
+		let tile_dimensions = TILE_DIMENSIONS.get().unwrap();
+
 		let map_datas = map_query
 			.par_iter(world)
 			.map(|(entity, map_data, point)| {
