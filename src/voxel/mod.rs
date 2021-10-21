@@ -1,24 +1,15 @@
 pub mod mesh;
 pub mod tile_data;
 
-use std::collections::{HashMap, HashSet};
-
-use crate::{custom_mesh::RequiresManualChange, Aabb, Octree, Point};
-
-use crate::custom_mesh;
+use self::mesh::MapMeshData;
+use crate::{
+	custom_mesh::{self, MeshData, RequiresManualChange},
+	Aabb, Octree, Point, TILE_DIMENSIONS,
+};
 use legion::*;
 use octree::PointData;
+use std::collections::{HashMap, HashSet};
 use tile_data::TileData;
-
-use crate::custom_mesh::MeshData;
-
-use self::mesh::MapMeshData;
-
-pub const TILE_DIMENSIONS: TileDimensions = TileDimensions {
-	x: 1.0,
-	y: 1.0,
-	z: 1.0,
-};
 
 ///ChangeType stores the range of the changes so that we can determine whether or not adjacent MapChunks actually need to change, and
 /// the range of the original change for making comparisons
@@ -35,12 +26,6 @@ pub enum ChangeType {
 #[derive(Clone, Debug, PartialEq)]
 struct ManuallyChange {
 	ranges: Vec<ChangeType>,
-}
-
-pub struct TileDimensions {
-	pub x: f32,
-	pub y: f32,
-	pub z: f32,
 }
 
 #[derive(Debug, Copy, Clone)]
@@ -66,10 +51,11 @@ impl Default for CoordPos {
 pub fn map_coords_to_world(
 	map_coord: Point,
 ) -> nalgebra::Vector3<f32> {
+	let tile_dimensions = TILE_DIMENSIONS.get().unwrap();
 	nalgebra::Vector3::<f32>::new(
-		map_coord.x as f32 * TILE_DIMENSIONS.x,
-		map_coord.y as f32 * TILE_DIMENSIONS.y,
-		map_coord.z as f32 * TILE_DIMENSIONS.z,
+		map_coord.x as f32 * tile_dimensions.x,
+		map_coord.y as f32 * tile_dimensions.y,
+		map_coord.z as f32 * tile_dimensions.z,
 	)
 }
 

@@ -5,6 +5,7 @@ pub mod voxel;
 use gdnative::prelude::*;
 use legion::*;
 use octree::PointData;
+use once_cell::sync::OnceCell;
 pub use voxel::tile_data::TileData;
 
 pub type Octree = octree::Octree<i32, TileData>;
@@ -12,7 +13,10 @@ pub type Aabb = aabb::Aabb<i32>;
 pub type Point = nalgebra::Vector3<i32>;
 pub type Vector3D = nalgebra::Vector3<f32>;
 
+pub static TILE_DIMENSIONS: OnceCell<Vector3> = OnceCell::new();
+
 #[derive(NativeClass)]
+#[register_with(Self::register)]
 #[inherit(Node)]
 pub struct VoxelMesh {
 	pub world: World,
@@ -28,6 +32,26 @@ pub struct VoxelMesh {
 
 #[methods]
 impl VoxelMesh {
+	fn register(builder: &ClassBuilder<Self>) {
+		builder
+			.add_property("tile_dimensions")
+			.with_ref_getter(Self::get_tile_dimensions)
+			.with_setter(Self::set_tile_dimensions)
+			.done();
+	}
+
+	fn get_tile_dimensions(&self, _owner: TRef<Node>) -> &Vector3 {
+		TILE_DIMENSIONS.get().unwrap()
+	}
+
+	fn set_tile_dimensions(
+		&mut self,
+		_owner: TRef<Node>,
+		value: Vector3,
+	) {
+		TILE_DIMENSIONS.set(value).unwrap()
+	}
+
 	fn new(owner: &Node) -> Self {
 		let owner = unsafe { owner.assume_shared() };
 

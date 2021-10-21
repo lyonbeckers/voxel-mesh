@@ -158,6 +158,8 @@ pub fn create_drawing_system(
 		Read<ManuallyChange>,
 	)>::query();
 
+	let tile_dimensions = TILE_DIMENSIONS.get().unwrap();
+
 	Box::new(move |world, resources| {
 		let map_datas = map_query
 			.par_iter(world)
@@ -341,7 +343,7 @@ pub fn create_drawing_system(
                                             true
                                         } else {
 
-                                            let point_y_in_world = point_above.y as f32 * TILE_DIMENSIONS.y;
+                                            let point_y_in_world = point_above.y as f32 * tile_dimensions.y;
                                             let subdivide_for_repeat = is_a_subdivision(point_y_in_world);
 
                                             if subdivide_for_repeat {
@@ -421,7 +423,7 @@ pub fn create_drawing_system(
                                                 break;
                                             } else {
 
-                                                let point_y_in_world = bottom.y as f32 * TILE_DIMENSIONS.y;
+                                                let point_y_in_world = bottom.y as f32 * tile_dimensions.y;
                                                 let subdivide_for_repeat = is_a_subdivision(point_y_in_world);
 
                                                 if subdivide_for_repeat {
@@ -463,10 +465,10 @@ pub fn create_drawing_system(
 
                                 let world_point = map_coords_to_world(point);
 
-                                let top_left = Vector3::new(world_point.x, world_point.y+TILE_DIMENSIONS.y, world_point.z+TILE_DIMENSIONS.z);
-                                let top_right = Vector3::new(world_point.x+TILE_DIMENSIONS.x, world_point.y+TILE_DIMENSIONS.y, world_point.z+TILE_DIMENSIONS.z);
-                                let bottom_left = Vector3::new(world_point.x, world_point.y+TILE_DIMENSIONS.y, world_point.z);
-                                let bottom_right = Vector3::new(world_point.x+TILE_DIMENSIONS.x, world_point.y+TILE_DIMENSIONS.y, world_point.z);
+                                let top_left = Vector3::new(world_point.x, world_point.y+tile_dimensions.y, world_point.z+tile_dimensions.z);
+                                let top_right = Vector3::new(world_point.x+tile_dimensions.x, world_point.y+tile_dimensions.y, world_point.z+tile_dimensions.z);
+                                let bottom_left = Vector3::new(world_point.x, world_point.y+tile_dimensions.y, world_point.z);
+                                let bottom_right = Vector3::new(world_point.x+tile_dimensions.x, world_point.y+tile_dimensions.y, world_point.z);
 
                                 let center = bottom_left + (top_right - bottom_left) / 2.;
 
@@ -1349,6 +1351,8 @@ fn adjust_scaled_pts(
 	let mut scaled_left = scaled_left;
 	let mut scaled_right = scaled_right;
 
+	let tile_dimensions = TILE_DIMENSIONS.get().unwrap();
+
 	if !open_sides.contains(&dir)
 		&& (open_sides.contains(&right_dir)
 			|| open_sides.contains(&right_diag))
@@ -1358,14 +1362,14 @@ fn adjust_scaled_pts(
 				right_dir.x as f32,
 				right_dir.y as f32,
 				right_dir.z as f32,
-			) * TILE_DIMENSIONS.x
+			) * tile_dimensions.x
 				/ 2.
 		} else {
 			Vector3::new(
 				right_dir.x as f32,
 				right_dir.y as f32,
 				right_dir.z as f32,
-			) * TILE_DIMENSIONS.z
+			) * tile_dimensions.z
 				/ 2.
 		};
 
@@ -1384,10 +1388,10 @@ fn adjust_scaled_pts(
 		let middle =
 			if dir.x.abs() > dir.z.abs() {
 				Vector3::new(dir.x as f32, dir.y as f32, dir.z as f32)
-					* TILE_DIMENSIONS.x / 2.
+					* tile_dimensions.x / 2.
 			} else {
 				Vector3::new(dir.x as f32, dir.y as f32, dir.z as f32)
-					* TILE_DIMENSIONS.z / 2.
+					* tile_dimensions.z / 2.
 			};
 
 		let middle =
@@ -1407,10 +1411,10 @@ fn adjust_scaled_pts(
 		let middle =
 			if dir.x.abs() > dir.z.abs() {
 				Vector3::new(dir.x as f32, dir.y as f32, dir.z as f32)
-					* TILE_DIMENSIONS.x / 2.
+					* tile_dimensions.x / 2.
 			} else {
 				Vector3::new(dir.x as f32, dir.y as f32, dir.z as f32)
-					* TILE_DIMENSIONS.z / 2.
+					* tile_dimensions.z / 2.
 			};
 
 		let middle =
