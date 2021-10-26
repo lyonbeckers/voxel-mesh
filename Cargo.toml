@@ -9,7 +9,7 @@ edition = "2018"
 [dependencies]
 aabb = { git = "https://github.com/lyonbeckers/rs-aabb" }
 crossbeam-channel = "0.5"
-gdnative = { git = "https://github.com/lyonbeckers/godot-rust.git", rev = "833b86c" }
+gdnative = { git = "https://github.com/lyonbeckers/godot-rust.git", rev = "e87fbfd" }
 lazy_static = "1.4"
 legion = "0.4"
 nalgebra = "0.29"
